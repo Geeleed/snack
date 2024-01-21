@@ -1,113 +1,195 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useRef, useState } from "react";
+
+function Help({ helpPage, setHelpPage }: any) {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div
+      className=" w-full h-full z-10 bg-[#000000dd] absolute top-0 left-0 p-10 grid place-content-center place-items-center cursor-pointer"
+      onClick={() => setHelpPage(!helpPage)}
+    >
+      <p className=" text-2xl text-white">Highest Worth = Best PRICE!</p>
+      <p className=" text-2xl text-white">best price for quantity</p>
+      <br />
+      <p className=" text-sm text-white">v.1.0.0</p>
+      <p className=" text-sm text-white">Dev by Geeleed</p>
+    </div>
+  );
+}
+
+function Snack() {
+  return (
+    <div className=" place-self-center relative w-full h-full rounded-md flex justify-center items-center flex-col leading-none bg-[#B51200]">
+      <h1 className=" text-[4rem] text-[#fff] font-extrabold">SNACK</h1>
+      <p className=" text-[0.8rem] text-[#fff]">
+        Compare worth for best quantity!
+      </p>
+    </div>
+  );
+}
+
+function Root() {
+  const [helpPage, setHelpPage] = useState<any>(false);
+  const [items, setItems] = useState<any[]>([
+    { price: 10, weight: 29 },
+    { price: 15, weight: 45 },
+  ]);
+  const refPrice = useRef<HTMLInputElement>(null);
+  const refWeight = useRef<HTMLInputElement>(null);
+  function handleSubmit() {
+    const price = refPrice.current?.value;
+    const weight = refWeight.current?.value;
+    const priceFocusThenSetEmpty = () => {
+      refPrice.current?.focus();
+      refPrice.current!.value = "";
+    };
+    if (Number(price) === 0) {
+      priceFocusThenSetEmpty();
+      return;
+    }
+    if (price !== "" && weight !== "") {
+      setItems((prev: any) => [
+        ...prev,
+        {
+          price: Number(price),
+          weight: Number(weight),
+        },
+      ]);
+      priceFocusThenSetEmpty();
+      refWeight.current!.value = "";
+    }
+  }
+  return (
+    <div className=" grid place-content-center place-items-center">
+      <div className=" w-full h-[100vh] grid grid-rows-7 p-5 bg-[#f9f6f2] relative md:w-[500px] md:drop-shadow-lg md:rounded-md">
+        {/* head */}
+        {helpPage && <Help helpPage={helpPage} setHelpPage={setHelpPage} />}
+        <div className=" row-span-2 w-full grid bg-[#f9f6f2] relative rounded-md">
+          <Snack />
+          <h1
+            className=" absolute bottom-0 right-0 p-3 text-xl bg-[#f9f6f2] m-1 rounded-full w-8 h-8 flex justify-center items-center cursor-pointer"
+            onClick={() => setHelpPage(!helpPage)}
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            ?
+          </h1>
+        </div>
+        <div className=" row-span-4">
+          {/* field name */}
+          <div className=" grid grid-cols-7 place-items-center gap-2 ">
+            <div className=" col-span-2 h-[3rem] grid place-items-center place-content-center w-full text-[#000]">
+              Price
+            </div>
+            <div className=" col-span-2 h-[3rem] grid place-items-center place-content-center w-full text-[#000]">
+              Weight
+            </div>
+            <div className=" col-span-2 h-[3rem] grid place-items-center place-content-center w-full text-[#000]">
+              Worth
+            </div>
+            <button
+              className="col-span-1 h-[3rem] grid place-items-center place-content-center w-full text-[#000] cursor-pointer bg-gray-200 m-1 p-1 rounded-md"
+              onClick={() => setItems([])}
+            >
+              Reset
+            </button>
+          </div>
+          {/* display items */}
+          <div className=" h-[80%] overflow-y-auto flex flex-col gap-2">
+            {items.map((item, index) => (
+              <Display
+                key={index}
+                itemIndex={index}
+                price={item.price}
+                weight={item.weight}
+                setItems={setItems}
+                items={items}
+              />
+            ))}
+          </div>
+        </div>
+        {/* input item data */}
+        <div className=" row-span-1 flex h-full gap-2">
+          <input
+            className="w-full p-3 text-[2rem] bg-[#f9f6f2] rounded-md border-[#B51200] border-2 text-[#B51200]"
+            type="number"
+            placeholder="Price"
+            ref={refPrice}
+            onKeyDown={(event) => event.key === "Enter" && handleSubmit()}
+          />
+          <input
+            className="w-full p-3 text-[2rem] bg-[#f9f6f2] rounded-md border-[#B51200] border-2 text-[#B51200]"
+            type="number"
+            placeholder="Weight"
+            ref={refWeight}
+            onKeyDown={(event) => event.key === "Enter" && handleSubmit()}
+          />
+          <button
+            className="w-4/5 text-4xl flex justify-center items-center bg-[#B51200] cursor-pointer rounded-full text-[#ffffff] font-extrabold"
+            onClick={handleSubmit}
+          >
+            +
+          </button>
         </div>
       </div>
+    </div>
+  );
+}
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+export default Root;
+
+interface propsDisplay {
+  itemIndex: number;
+  price: number;
+  weight: number;
+  setItems: any;
+  items: any[];
+}
+function Display({ itemIndex, price, weight, setItems, items }: propsDisplay) {
+  const worth = items.map((item) => item.weight / item.price);
+  const highestValue = Math.max(...worth);
+  const isHighest =
+    worth[itemIndex] === highestValue ? " bg-[#FFD712] " : " bg-[#f9f6f2] ";
+  const isRecommend = worth[itemIndex] === highestValue;
+
+  return (
+    <div
+      className={
+        " grid grid-cols-7 place-items-center gap-2 rounded-md border-b-gray-300 border-b" +
+        isHighest
+      }
+    >
+      <div className=" text-xl col-span-2 h-[3rem] grid place-items-center w-full">
+        {price} ฿
       </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className=" text-xl col-span-2 h-[3rem] grid place-items-center w-full">
+        {weight}
       </div>
-    </main>
+      <div className=" text-xl col-span-2 h-[3rem] grid place-items-center w-full">
+        <div className="flex justify-center items-center gap-2">
+          {isRecommend && (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="#B51200"
+              className="bi bi-hand-thumbs-up scale-150 animate-blink"
+              viewBox="0 0 16 16"
+            >
+              <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z" />
+            </svg>
+          )}
+          {(weight / price).toFixed(2)}
+        </div>
+      </div>
+      <button
+        className=" text-xl col-span-1 h-[3rem] grid place-items-center w-full"
+        onClick={() => {
+          setItems((prev: any) =>
+            prev.filter((_: any, index: number) => index !== itemIndex)
+          );
+        }}
+      >
+        X
+      </button>
+    </div>
   );
 }
