@@ -5,13 +5,13 @@ import React, { useEffect, useRef, useState } from "react";
 function Help({ helpPage, setHelpPage }: any) {
   return (
     <div
-      className=" w-full h-full z-10 bg-[#000000dd] absolute top-0 left-0 p-10 grid place-content-center place-items-center cursor-pointer"
+      className=" text-center w-full h-full z-10 bg-[#000000dd] absolute top-0 left-0 p-10 grid place-content-center place-items-center cursor-pointer"
       onClick={() => setHelpPage(!helpPage)}
     >
-      <p className=" text-2xl text-white">Highest Worth = Best PRICE!</p>
-      <p className=" text-2xl text-white">best price for quantity</p>
+      <p className=" text-xl text-white">Highest Worth = Best PRICE!</p>
+      <p className=" text-xl text-white">best price for quantity</p>
       <br />
-      <p className=" text-sm text-white">v.1.0.0</p>
+      <p className=" text-sm text-white">v.1.0.1</p>
       <p className=" text-sm text-white">Dev by Geeleed</p>
     </div>
   );
