@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 function Help({ helpPage, setHelpPage }: any) {
   return (
@@ -29,6 +29,7 @@ function Snack() {
 }
 
 function Root() {
+  const [submitForm, setSubmitForm] = useState<any>(false);
   const [helpPage, setHelpPage] = useState<any>(false);
   const [items, setItems] = useState<any[]>([
     { price: 10, weight: 29 },
@@ -58,7 +59,9 @@ function Root() {
       priceFocusThenSetEmpty();
       refWeight.current!.value = "";
     }
+    setSubmitForm(false);
   }
+  useEffect(() => refPrice.current?.focus(), [submitForm]);
   return (
     <div className=" grid place-content-center place-items-center">
       <div className=" w-full h-[100vh] grid grid-rows-7 p-5 bg-[#f9f6f2] relative md:w-[500px] md:drop-shadow-lg md:rounded-md">
@@ -108,23 +111,49 @@ function Root() {
         </div>
         {/* input item data */}
         <div className=" row-span-1 flex h-full gap-2">
-          <input
-            className="w-full p-3 text-[2rem] bg-[#f9f6f2] rounded-md border-[#B51200] border-2 text-[#B51200]"
-            type="number"
-            placeholder="Price"
-            ref={refPrice}
-            onKeyDown={(event) => event.key === "Enter" && handleSubmit()}
-          />
-          <input
-            className="w-full p-3 text-[2rem] bg-[#f9f6f2] rounded-md border-[#B51200] border-2 text-[#B51200]"
-            type="number"
-            placeholder="Weight"
-            ref={refWeight}
-            onKeyDown={(event) => event.key === "Enter" && handleSubmit()}
-          />
+          {submitForm && (
+            <div className=" absolute top-0 left-0 w-full h-full p-10 bg-[#000000bb] flex flex-col gap-2">
+              <input
+                className="w-full p-3 text-[2rem] bg-[#f9f6f2] rounded-md border-[#B51200] border-2 text-[#B51200]"
+                type="number"
+                placeholder="Price"
+                ref={refPrice}
+                onKeyDown={(event) => event.key === "Enter" && handleSubmit()}
+              />
+              <input
+                className="w-full p-3 text-[2rem] bg-[#f9f6f2] rounded-md border-[#B51200] border-2 text-[#B51200]"
+                type="number"
+                placeholder="Weight"
+                ref={refWeight}
+                onKeyDown={(event) => event.key === "Enter" && handleSubmit()}
+              />
+              <button
+                className="w-full text-3xl flex justify-center items-center bg-[#B51200] cursor-pointer rounded-md text-[#ffffff] p-3"
+                onClick={handleSubmit}
+              >
+                Add one
+              </button>
+              <button
+                className="w-full text-3xl flex justify-center items-center bg-[#B51200] cursor-pointer rounded-md text-[#ffffff] p-3"
+                onClick={() => {
+                  handleSubmit();
+                  setSubmitForm(true);
+                }}
+              >
+                Add more...
+              </button>
+              <div
+                className=" h-full"
+                onClick={() => setSubmitForm(false)}
+              ></div>
+            </div>
+          )}
+
           <button
-            className="w-4/5 text-4xl flex justify-center items-center bg-[#B51200] cursor-pointer rounded-full text-[#ffffff] font-extrabold"
-            onClick={handleSubmit}
+            className="w-full text-4xl flex justify-center items-center bg-[#B51200] cursor-pointer rounded-md text-[#ffffff] font-extrabold"
+            onClick={() => {
+              setSubmitForm(true);
+            }}
           >
             +
           </button>
