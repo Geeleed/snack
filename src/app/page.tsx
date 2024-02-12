@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import package_json from "../../package.json";
 
 function Help({ helpPage, setHelpPage }: any) {
   return (
@@ -11,7 +12,7 @@ function Help({ helpPage, setHelpPage }: any) {
       <p className=" text-xl text-white">Highest Worth = Best PRICE!</p>
       <p className=" text-xl text-white">best price for quantity</p>
       <br />
-      <p className=" text-sm text-white">v.1.0.1</p>
+      <p className=" text-sm text-white">v.{package_json.version}</p>
       <p className=" text-sm text-white">Dev by Geeleed</p>
     </div>
   );
